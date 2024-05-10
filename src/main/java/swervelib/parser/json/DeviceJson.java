@@ -13,8 +13,8 @@ import swervelib.encoders.AnalogAbsoluteEncoderSwerve;
 import swervelib.encoders.CANCoderSwerve;
 import swervelib.encoders.CanAndCoderSwerve;
 import swervelib.encoders.PWMDutyCycleEncoderSwerve;
-import swervelib.encoders.SparkMaxAnalogEncoderSwerve;
-import swervelib.encoders.SparkMaxEncoderSwerve;
+import swervelib.encoders.SparkAnalogEncoderSwerve;
+import swervelib.encoders.SparkEncoderSwerve;
 import swervelib.encoders.SwerveAbsoluteEncoder;
 import swervelib.imu.ADIS16448Swerve;
 import swervelib.imu.ADIS16470Swerve;
@@ -69,11 +69,11 @@ public class DeviceJson
         return null;
       case "integrated":
       case "attached":
-        return new SparkMaxEncoderSwerve(motor, 1);
+        return new SparkEncoderSwerve(motor, 1);
       case "sparkmax_analog":
-        return new SparkMaxAnalogEncoderSwerve(motor);
+        return new SparkAnalogEncoderSwerve(motor);
       case "canandcoder":
-        return new SparkMaxEncoderSwerve(motor, 360);
+        return new SparkEncoderSwerve(motor, 360);
       case "canandcoder_can":
         return new CanAndCoderSwerve(id);
       case "ctre_mag":

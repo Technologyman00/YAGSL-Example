@@ -1,6 +1,6 @@
 package swervelib.encoders;
 
-import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkBase;
 import com.revrobotics.REVLibError;
 import com.revrobotics.SparkAnalogSensor;
 import com.revrobotics.SparkAnalogSensor.Mode;
@@ -9,13 +9,13 @@ import swervelib.motors.SwerveMotor;
 import swervelib.telemetry.Alert;
 
 /**
- * SparkMax absolute encoder, attached through the data port analog pin.
+ * SPARK absolute encoder, attached through the data port analog pin.
  */
-public class SparkMaxAnalogEncoderSwerve extends SwerveAbsoluteEncoder
+public class SparkAnalogEncoderSwerve extends SwerveAbsoluteEncoder
 {
 
   /**
-   * The {@link SparkAnalogSensor} representing the duty cycle encoder attached to the SparkMax analog port.
+   * The {@link SparkAnalogSensor} representing the duty cycle encoder attached to the SPARK controller analog port.
    */
   public  SparkAnalogSensor encoder;
   /**
@@ -29,27 +29,27 @@ public class SparkMaxAnalogEncoderSwerve extends SwerveAbsoluteEncoder
 
 
   /**
-   * Create the {@link SparkMaxAnalogEncoderSwerve} object as a analog sensor from the {@link CANSparkMax} motor data
+   * Create the {@link SparkAnalogEncoderSwerve} object as a analog sensor from the {@link CANSparkBase} motor data
    * port analog pin.
    *
    * @param motor Motor to create the encoder from.
    */
-  public SparkMaxAnalogEncoderSwerve(SwerveMotor motor)
+  public SparkAnalogEncoderSwerve(SwerveMotor motor)
   {
-    if (motor.getMotor() instanceof CANSparkMax)
+    if (motor.getMotor() instanceof CANSparkBase)
     {
-      encoder = ((CANSparkMax) motor.getMotor()).getAnalog(Mode.kAbsolute);
+      encoder = ((CANSparkBase) motor.getMotor()).getAnalog(Mode.kAbsolute);
     } else
     {
-      throw new RuntimeException("Motor given to instantiate SparkMaxEncoder is not a CANSparkMax");
+      throw new RuntimeException("Motor given to instantiate SPARK Encoder is not a CANSparkBase");
     }
     failureConfiguring = new Alert(
         "Encoders",
-        "Failure configuring SparkMax Analog Encoder",
+        "Failure configuring SPARK Analog Encoder",
         Alert.AlertType.WARNING_TRACE);
     doesNotSupportIntegratedOffsets = new Alert(
         "Encoders",
-        "SparkMax Analog Sensors do not support integrated offsets",
+        "SPARK Analog Sensors do not support integrated offsets",
         Alert.AlertType.WARNING_TRACE);
 
   }
@@ -59,7 +59,7 @@ public class SparkMaxAnalogEncoderSwerve extends SwerveAbsoluteEncoder
    *
    * @param config Lambda supplier returning the error state.
    */
-  private void configureSparkMax(Supplier<REVLibError> config)
+  private void configureSpark(Supplier<REVLibError> config)
   {
     for (int i = 0; i < maximumRetries; i++)
     {

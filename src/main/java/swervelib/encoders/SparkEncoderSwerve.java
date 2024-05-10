@@ -1,7 +1,7 @@
 package swervelib.encoders;
 
 import com.revrobotics.AbsoluteEncoder;
-import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkBase;
 import com.revrobotics.REVLibError;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
 import java.util.function.Supplier;
@@ -9,13 +9,13 @@ import swervelib.motors.SwerveMotor;
 import swervelib.telemetry.Alert;
 
 /**
- * SparkMax absolute encoder, attached through the data port.
+ * SPARK absolute encoder, attached through the data port.
  */
-public class SparkMaxEncoderSwerve extends SwerveAbsoluteEncoder
+public class SparkEncoderSwerve extends SwerveAbsoluteEncoder
 {
 
   /**
-   * The {@link AbsoluteEncoder} representing the duty cycle encoder attached to the SparkMax.
+   * The {@link AbsoluteEncoder} representing the duty cycle encoder attached to the SPARK Motor Controller.
    */
   public  AbsoluteEncoder encoder;
   /**
@@ -28,29 +28,29 @@ public class SparkMaxEncoderSwerve extends SwerveAbsoluteEncoder
   private Alert           offsetFailure;
 
   /**
-   * Create the {@link SparkMaxEncoderSwerve} object as a duty cycle from the {@link CANSparkMax} motor.
+   * Create the {@link SparkEncoderSwerve} object as a duty cycle from the {@link CANSparkBase} motor.
    *
    * @param motor            Motor to create the encoder from.
    * @param conversionFactor The conversion factor to set if the output is not from 0 to 360.
    */
-  public SparkMaxEncoderSwerve(SwerveMotor motor, int conversionFactor)
+  public SparkEncoderSwerve(SwerveMotor motor, int conversionFactor)
   {
     failureConfiguring = new Alert(
         "Encoders",
-        "Failure configuring SparkMax Analog Encoder",
+        "Failure configuring SPARK Analog Encoder",
         Alert.AlertType.WARNING_TRACE);
     offsetFailure = new Alert(
         "Encoders",
         "Failure to set Absolute Encoder Offset",
         Alert.AlertType.WARNING_TRACE);
-    if (motor.getMotor() instanceof CANSparkMax)
+    if (motor.getMotor() instanceof CANSparkBase)
     {
-      encoder = ((CANSparkMax) motor.getMotor()).getAbsoluteEncoder(Type.kDutyCycle);
-      configureSparkMax(() -> encoder.setVelocityConversionFactor(conversionFactor));
-      configureSparkMax(() -> encoder.setPositionConversionFactor(conversionFactor));
+      encoder = ((CANSparkBase) motor.getMotor()).getAbsoluteEncoder(Type.kDutyCycle);
+      configureSpark(() -> encoder.setVelocityConversionFactor(conversionFactor));
+      configureSpark(() -> encoder.setPositionConversionFactor(conversionFactor));
     } else
     {
-      throw new RuntimeException("Motor given to instantiate SparkMaxEncoder is not a CANSparkMax");
+      throw new RuntimeException("Motor given to instantiate SPARK Encoder is not a CANSparkBase");
     }
   }
 
@@ -59,7 +59,7 @@ public class SparkMaxEncoderSwerve extends SwerveAbsoluteEncoder
    *
    * @param config Lambda supplier returning the error state.
    */
-  private void configureSparkMax(Supplier<REVLibError> config)
+  private void configureSpark(Supplier<REVLibError> config)
   {
     for (int i = 0; i < maximumRetries; i++)
     {
@@ -123,7 +123,7 @@ public class SparkMaxEncoderSwerve extends SwerveAbsoluteEncoder
   }
 
   /**
-   * Sets the Absolute Encoder Offset inside of the SparkMax's Memory.
+   * Sets the Absolute Encoder Offset inside of the SPARK contoller's Memory.
    *
    * @param offset the offset the Absolute Encoder uses as the zero point.
    * @return if setting Absolute Encoder Offset was successful or not.
